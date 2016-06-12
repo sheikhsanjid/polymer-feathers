@@ -1,0 +1,50 @@
+<link rel="import" href="../polymer/polymer.html">
+<script src="../feathers-client/dist/feathers.js"></script>
+
+<dom-module id="feathers-app">
+    <script>
+        var FeathersApp = Polymer({
+            is: 'feathers-app',
+
+            properties: {
+                _feathersApp: Object,
+                host: {
+                    type: String,
+                    value: '/'
+                },
+                services: {
+                    type: Array,
+                    value: []
+                },
+                token: String,
+                user: Object
+            },
+
+            authenticate: function (opts) {
+                var self = this;
+                return new Promise(function (resolve, reject) {
+                    return self._feathersApp.authenticate(opts).then(function (result) {
+                        self.set('token', result.token);
+                        self.set('user', result.data);
+                        return resolve(result);
+                    }).catch(reject);
+                });
+            },
+
+            logout: function () {
+                return this._feathersApp.logout();
+            },
+
+            ready: function () {
+                this._feathersApp = feathers().configure(feathers.hooks());
+                this.set('services', this._feathersApp.services);
+            },
+
+            service: function (path) {
+                var result = this._feathersApp.service(path);
+                this.set('services', this._feathersApp.services);
+                return result;
+            }
+        });
+    </script>
+</dom-module>

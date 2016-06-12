@@ -1,0 +1,117 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="feathers-app.html">
+
+<dom-module id="feathers-service">
+    <script>
+        Polymer({
+            is: 'feathers-service',
+            properties: {
+                _service: Object,
+                app: FeathersApp,
+                idField: {
+                    type: String,
+                    value: '_id'
+                },
+                items: {
+                    type: Array,
+                    value: []
+                },
+                paginated: Boolean,
+                path: String
+            },
+
+            find: function (params) {
+                var self = this;
+                return new Promise(function (resolve, reject) {
+                    return self._service.find(params).then(function (result) {
+                        self.set('items', self.items.concat(self.paginated ? result.data : result));
+                        return resolve(result);
+                    }).catch(reject);
+                });
+            },
+
+            get: function (id, params) {
+                return this._service.get(id, params);
+            },
+
+            create: function (data, params) {
+                return this._service.create(data, params);
+            },
+
+            update: function (id, data, params) {
+                return this._service.update(id, data, params);
+            },
+
+            patch: function (id, data, params) {
+                return this._service.patch(id, data, params);
+            },
+
+            remove: function (id, params) {
+                return this._service.remove(id, params);
+            },
+
+            on: function (event, cb) {
+                return this._service.on(event, cb);
+            },
+
+            _findIndexOfItem: function (item) {
+                var id = item[this.idField || '_id'];
+
+                for (var i = 0; i < this.items.length; i++) {
+                    var targetId = this.items[i][this.idField || '_id'];
+
+                    if (id === targetId)
+                        return i;
+                }
+
+                return -1;
+            },
+
+            _onCreated: function (item) {
+                this.set('items', this.items.concat(item));
+            },
+
+            _onUpdated: function (item) {
+                var items = this.items;
+                var index = this._findIndexOfItem(item);
+
+                if (index === -1)
+                    return;
+
+                items[index] = item;
+                this.set('items', items);
+            },
+
+            _onPatched: function (item) {
+                var items = this.items;
+                var index = this._findIndexOfItem(item);
+
+                if (index === -1)
+                    return;
+
+                items[index] = Object.assign(items[index], item);
+                this.set('items', items);
+            },
+
+            _onRemoved: function (item) {
+                var items = this.items;
+                var index = this._findIndexOfItem(item);
+
+                if (index === -1)
+                    return;
+
+                items.splice(index, 1);
+                this.set('items', items);
+            },
+
+            ready: function () {
+                this._service = this.app._feathersApp.service(this.path);
+                this._service.on("created", this._onCreated.bind(this));
+                this._service.on("updated", this._onUpdated.bind(this));
+                this._service.on("patched", this._onPatched.bind(this));
+                this._service.on("removed", this._onRemoved.bind(this));
+                this.app.set('services', this.app._feathersApp.services);
+            }
+        })
+    </script>
+</dom-module>

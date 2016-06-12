@@ -1,0 +1,19 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="feathers-app.html">
+<script src="../feathers-client/dist/feathers.js"></script>
+
+<dom-module id="feathers-authentication">
+    <script>
+        Polymer({
+            is: 'feathers-authentication',
+            properties: {
+                app: FeathersApp
+            },
+            ready: function () {
+                this.app._feathersApp = this.app._feathersApp.configure(feathers.authentication({
+                    storage: window.localStorage
+                }));
+            }
+        })
+    </script>
+</dom-module>

@@ -1,0 +1,32 @@
+{
+  "name": "polymer-feathers",
+  "version": "1.0.0",
+  "description": "Polymer bindings for FeathersJS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thosakwe/polymer-feathers.git"
+  },
+  "keywords": [
+    "polymer",
+    "feathers"
+  ],
+  "author": "Tobe O <thosakwe@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thosakwe/polymer-feathers/issues"
+  },
+  "homepage": "https://github.com/thosakwe/polymer-feathers#readme",
+  "devDependencies": {
+    "feathers": "^2.0.1",
+    "feathers-authentication": "^0.7.8",
+    "feathers-hooks": "^1.5.4",
+    "feathers-rest": "^1.4.2",
+    "feathers-socketio": "^1.4.1",
+    "mocha": "^2.5.3",
+    "nightmare": "^2.5.1"
+  }
+}

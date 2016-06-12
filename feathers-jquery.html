@@ -1,0 +1,19 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="feathers-app.html">
+<script src="../feathers-client/dist/feathers.js"></script>
+<script src="../jquery/dist/jquery.min.js"></script>
+
+<dom-module id="feathers-jquery">
+    <script>
+        Polymer({
+            is: 'feathers-jquery',
+            properties: {
+                app: FeathersApp
+            },
+            ready: function() {
+                var rest = feathers.rest(this.app.host);
+                this.app._feathersApp = this.app._feathersApp.configure(rest.jquery(jQuery));
+            }
+        })
+    </script>
+</dom-module>

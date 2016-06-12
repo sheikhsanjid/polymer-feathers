@@ -1,0 +1,19 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="feathers-app.html">
+<script src="../feathers-client/dist/feathers.js"></script>
+<script src="../superagent/lib/client.js"></script>
+
+<dom-module id="feathers-superagent">
+    <script>
+        Polymer({
+            is: 'feathers-superagent',
+            properties: {
+                app: FeathersApp
+            },
+            ready: function() {
+                var rest = feathers.rest(this.app.host);
+                this.app._feathersApp = this.app._feathersApp.configure(rest.superagent(superagent));
+            }
+        })
+    </script>
+</dom-module>
